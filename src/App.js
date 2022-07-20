@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
 
-function App() {
+import { ThemeProvider } from '@mui/material/styles';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
+import Theme from './themes/Theme';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './containers/Home';
+import MovieDetail from './containers/MovieDetail';
+
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={Theme}>
+      <CssBaseline />
+      <Navbar></Navbar>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+        }}
+      >
+        <main>
+          
+        <BrowserRouter> 
+          <Routes>
+              <Route path="/" element={<Home/>}/>
+              <Route path="/login" element={<Box sx={{ mt: 10 }}>Halaman Login</Box>}/>
+              <Route path="/register" element={<Box sx={{ mt: 10 }}>Halaman Register</Box>}/>
+              <Route path="/movie/:movieId" element={<MovieDetail/>}/>
+          </Routes>
+        </BrowserRouter>
+        </main>
+        
+        <Footer></Footer>
+      </Box>
+    </ThemeProvider>
   );
-}
-
+};
 export default App;
