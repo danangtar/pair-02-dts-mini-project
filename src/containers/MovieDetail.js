@@ -12,15 +12,18 @@ const MovieDetail = () => {
     useEffect(() => {
         const fetchMovie = async () => {
             try {
-                const fetchedMovie = await Tmdb.get("movie/" + params.movieId);
-                setMovie(fetchedMovie.data);
+                if(params)
+                {
+                    const fetchedMovie = await Tmdb.get("movie/" + params.movieId);
+                    setMovie(fetchedMovie.data);
+                }
             } catch (error) {
                 console.log(error);
             }
         }
 
         fetchMovie();
-    }, []);
+    }, [params]);
 
     return (
         <Container sx={{ py: 8 }}>
