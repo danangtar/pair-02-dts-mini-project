@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -29,20 +27,18 @@ function Copyright(props) {
   );
 }
 
-export default function Login() {
-    const [context, setContext] = React.useContext(UserContext);
-    let navigate = useNavigate();
+export default function Register() {
+  const [context] = React.useContext(UserContext);
+  let navigate = useNavigate();
 
-    if(context.loggedIn) {
-      navigate('/');
-    }
-  
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      setContext({ loggedIn: true, name: data.get('email') });
-      navigate('/');
-    };
+  if(context.loggedIn) {
+    navigate('/');
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate('/login');
+  };
 
   return (
     <ThemeProvider theme={Theme}>
@@ -76,7 +72,7 @@ export default function Login() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign up
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -101,10 +97,6 @@ export default function Login() {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
               <Button
                 color="secondary"
                 type="submit"
@@ -112,17 +104,14 @@ export default function Login() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link color="secondary" href="#" variant="body2">
-                    Forgot password?
-                  </Link>
                 </Grid>
                 <Grid item>
-                  <Link color="secondary" href="register" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link color="secondary" href="login" variant="body2">
+                    {"Have an account? Sign In"}
                   </Link>
                 </Grid>
               </Grid>

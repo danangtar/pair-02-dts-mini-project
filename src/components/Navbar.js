@@ -12,32 +12,51 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
-
-const pages = [
-  {url: '/', name: 'Home'},
-  {url: '/register', name: 'Register'},
-  {url: '/login', name: 'Login'}
-];
-const settings = ['Profile', 'Account', 'Logout'];
+import { UserContext } from '../contexts/UserContext';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [context, setContext] = React.useContext(UserContext);
+  let navigate = useNavigate();
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
+  let availPages;
+  if(context.loggedIn) {
+    availPages = [
+      {url: '/', name: 'Home'}
+    ];
+  }
+  else {
+    availPages = [
+      {url: '/', name: 'Home'},
+      {url: '/register', name: 'Register'},
+      {url: '/login', name: 'Login'}
+    ];
+  }
+  const pages = availPages;
+  const settings = ['Profile', 'Account', 'Logout'];
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
-    };
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+  const handleOpenNavMenu = (event) => {
+      setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+      setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+      setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
+  };
+
+  const logout = (event) => {
+      setContext({ loggedIn: false, name: '' });
+      navigate('/');
+  }
 
   return (
 
@@ -117,11 +136,12 @@ const Navbar = () => {
             </Link>
           ))}
         </Box>
-
+        {context.loggedIn &&
+        
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" variant="square" src="/logo.png" />
+              <Avatar alt="Remy Sharp" variant="square" src="ProfilePicture.jpg" />
             </IconButton>
           </Tooltip>
           <Menu
@@ -142,11 +162,17 @@ const Navbar = () => {
           >
             {settings.map((setting) => (
               <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
+                {setting !== 'Logout'&&
+                  <Typography textAlign="center">{setting}</Typography>
+                }
+                {setting === 'Logout'&&
+                  <Typography onClick={logout} textAlign="center">{setting}</Typography>
+                }
               </MenuItem>
             ))}
           </Menu>
         </Box>
+        }
       </Toolbar>
     </Container>
   </AppBar>

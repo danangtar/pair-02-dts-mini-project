@@ -9,6 +9,9 @@ const theme = createTheme({
         },
         secondary: {
             main: '#f50057',
+            light: '#f73387',
+            dark: '#ab0049',
+            contrastText: '#ffffff',
         },
         background: {
             default: '#000000',
@@ -17,6 +20,8 @@ const theme = createTheme({
         text: {
             primary: '#ffffff',
             secondary: '#fffffe',
+            disabled: 'rgba(255,255,255,0.5)',
+            hint: 'rgba(255,255,255,0.5)',
         },
     },
 });
