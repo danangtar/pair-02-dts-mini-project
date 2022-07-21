@@ -20,9 +20,9 @@ const App = () => {
           <Route path="/" element={<Main />}>
             <Route index element={<Home />} />
             <Route path="movie/:movieId" element={<MovieDetail />}/>
-            <Route path="login" element={<Login />}/>
-            <Route path="register" element={<Register />}/>
           </Route>
+          <Route path="login" element={<Login />}/>
+          <Route path="register" element={<Register />}/>
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>
