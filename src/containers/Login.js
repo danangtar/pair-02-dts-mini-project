@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from '../themes/Theme';
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../contexts/UserContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 function Copyright(props) {
   return (
@@ -30,18 +30,15 @@ function Copyright(props) {
 }
 
 export default function Login() {
-    const [context, setContext] = React.useContext(UserContext);
     let navigate = useNavigate();
-
-    if(context.loggedIn) {
-      navigate('/');
-    }
-  
+    let auth = React.useContext(AuthContext);
+    
     const handleSubmit = (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      setContext({ loggedIn: true, name: data.get('email') });
-      navigate('/');
+      auth.signin(data.get('email'), () => {
+        navigate('/');
+      });
     };
 
   return (

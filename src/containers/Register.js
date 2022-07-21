@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from '../themes/Theme';
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../contexts/UserContext';
 
 function Copyright(props) {
   return (
@@ -28,12 +27,7 @@ function Copyright(props) {
 }
 
 export default function Register() {
-  const [context] = React.useContext(UserContext);
   let navigate = useNavigate();
-
-  if(context.loggedIn) {
-    navigate('/');
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();

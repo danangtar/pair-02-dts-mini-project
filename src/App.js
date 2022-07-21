@@ -2,30 +2,75 @@ import * as React from 'react';
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
+  useLocation,
+  Navigate,
 } from "react-router-dom";
 import Main from './containers/Main';
 import Home from './containers/Home';
 import MovieDetail from './containers/MovieDetail';
 import Login from './containers/Login';
 import Register from './containers/Register';
-import { UserContext } from './contexts/UserContext';
+import { AuthContext } from "./contexts/AuthContext";
+import { fakeAuthProvider } from "./Auth";
+
+function RequireAuth({ children }) {
+  let auth = React.useContext(AuthContext);
+  let location = useLocation();
+
+  if (!auth.user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
+function RequireNotAuth({ children }) {
+  let auth = React.useContext(AuthContext);
+  let location = useLocation();
+
+  if (auth.user) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
+function AuthProvider({ children }) {
+  let [user, setUser] = React.useState(null);
+
+  let signin = (newUser, callback) => {
+    return fakeAuthProvider.signin(() => {
+      setUser(newUser);
+      callback();
+    });
+  };
+
+  let signout = (callback) => {
+    return fakeAuthProvider.signout(() => {
+      setUser(null);
+      callback();
+    });
+  };
+
+  let value = { user, signin, signout };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
 
 const App = () => {
-  const [context, setContext] = React.useState({ loggedIn: false, name: '' });
   return (
-      <UserContext.Provider value={[context, setContext]}>
-        <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
-          <Route path="/" element={<Main />}>
-            <Route index element={<Home />} />
-            <Route path="movie/:movieId" element={<MovieDetail />}/>
+          <Route element={<Main />}>
+            <Route path="/" element={<Home />} />
+            <Route path="movie/:movieId" element={<RequireAuth><MovieDetail /></RequireAuth>}/>
           </Route>
-          <Route path="login" element={<Login />}/>
-          <Route path="register" element={<Register />}/>
+          <Route path="login" element={<RequireNotAuth><Login /></RequireNotAuth>}/>
+          <Route path="register" element={<RequireNotAuth><Register /></RequireNotAuth>}/>
         </Routes>
-      </BrowserRouter>
-    </UserContext.Provider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 export default App;
